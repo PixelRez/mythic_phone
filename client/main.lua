@@ -17,25 +17,11 @@ Death = nil
 Callbacks = nil
 Inventory = nil
 
--- Make call to server to see if player has a phone => return true or false
---  If true, show phone, else no phone
-
--- AddEventHandler('mythic_base:shared:ComponentsReady', function()
---   Callbacks = Callbacks or exports['mythic_base']:FetchComponent('Callbacks')
---   Inventory = Inventory or exports['mythic_base']:FetchComponent('Inventory')
---   Death = exports['mythic_base']:FetchComponent('Death')
-
---   Citizen.CreateThread(function()
--- 		while CharData == nil do
--- 			CharData = exports['mythic_base']:FetchComponent('Character')
--- 			Citizen.Wait(250)
---     end
--- 	end)
--- end)
-
 AddEventHandler(
   "playerSpawned",
   function()
+    chat("Player spawned", {0, 255, 0})
+    isLoggedIn = true
     SendNUIMessage(
       {
         action = "SetServerID",
@@ -45,23 +31,16 @@ AddEventHandler(
   end
 )
 
-RegisterNetEvent("mythic_base:client:Logout")
+RegisterNetEvent("playerLogout")
 AddEventHandler(
-  "mythic_base:client:Logout",
+  "playerLogout",
   function()
+    isLoggedIn = false
     SendNUIMessage(
       {
         action = "Logout"
       }
     )
-  end
-)
-
-RegisterNetEvent("mythic_base:client:CharacterDataChanged")
-AddEventHandler(
-  "mythic_base:client:CharacterDataChanged",
-  function(charData)
-    CharData = charData
   end
 )
 
@@ -120,26 +99,6 @@ function CalculateTimeToDisplay()
 
   return obj
 end
-
-function hasDecrypt(cb)
-  Inventory.Checks:HasItem({{item = "decryptor", count = 1}}, cb)
-end
-
-RegisterNetEvent("mythic_base:client:Logout")
-AddEventHandler(
-  "mythic_base:client:Logout",
-  function()
-    isLoggedIn = false
-  end
-)
-
-RegisterNetEvent("mythic_base:client:CharacterSpawned")
-AddEventHandler(
-  "mythic_base:client:CharacterSpawned",
-  function()
-    isLoggedIn = true
-  end
-)
 
 local counter = 0
 Citizen.CreateThread(
@@ -285,7 +244,7 @@ AddEventHandler(
 RegisterNUICallback(
   "RegisterData",
   function(data, cb)
-    Callbacks:ServerCallback(
+    ESX.TriggerServerCallback(
       "mythic_phone:server:RegisterData",
       {
         key = data.key,
@@ -299,7 +258,7 @@ RegisterNUICallback(
 RegisterNUICallback(
   "GetData",
   function(data, cb)
-    Callbacks:ServerCallback(
+    ESX.TriggerServerCallback(
       "mythic_phone:server:GetData",
       {
         key = data.key
