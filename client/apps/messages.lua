@@ -2,12 +2,13 @@ RegisterNetEvent("mythic_phone:client:ReceiveText")
 AddEventHandler(
     "mythic_phone:client:ReceiveText",
     function(sender, text)
-        TriggerServerEvent(
-            "mythic_sounds:server:PlayWithinDistance",
-            10.0,
-            "text_message",
-            0.05 * (Config.Settings.volume / 100)
-        )
+        -- REVISIT THIS LATER
+        -- TriggerServerEvent(
+        --     "mythic_sounds:server:PlayWithinDistance",
+        --     10.0,
+        --     "text_message",
+        --     0.05 * (Config.Settings.volume / 100)
+        -- )
         exports["mythic_notify"]:SendAlert("inform", "You Received A Text From " .. sender)
 
         SendNUIMessage(
@@ -25,13 +26,13 @@ AddEventHandler(
 RegisterNUICallback(
     "SendText",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:SendText", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:SendText", cb, data)
     end
 )
 
 RegisterNUICallback(
     "DeleteConversation",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:DeleteConversation", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:DeleteConversation", cb, data)
     end
 )

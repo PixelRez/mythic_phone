@@ -126,9 +126,9 @@ TriggerEvent(
     end
 )
 
-RegisterServerEvent("mythic_base:server:CharacterSpawned")
+RegisterServerEvent("serverCharacterSpawned")
 AddEventHandler(
-    "mythic_base:server:CharacterSpawned",
+    "serverCharacterSpawned",
     function()
         local src = source
         Citizen.Wait(100) -- Try to ensure we're waiting until thd base action happens

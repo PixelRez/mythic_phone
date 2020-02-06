@@ -33,9 +33,9 @@ AddEventHandler(
     end
 )
 
-RegisterServerEvent("mythic_base:server:CharacterSpawned")
+RegisterServerEvent("serverCharacterSpawned")
 AddEventHandler(
-    "mythic_base:server:CharacterSpawned",
+    "serverCharacterSpawned",
     function()
         TriggerClientEvent("mythic_phone:client:SetupData", source, {{name = "adverts", data = Advertisements}})
     end
@@ -48,36 +48,29 @@ AddEventHandler(
     end
 )
 
-AddEventHandler(
-    "mythic_base:shared:ComponentsReady",
-    function()
-        -- Callbacks = Callbacks or exports['mythic_base']:FetchComponent('Callbacks')
-
-        ESX.RegisterServerCallback(
-            "mythic_phone:server:NewAd",
-            function(source, data, cb)
-                local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(source):GetData("character")
-                local id = char:GetData("id")
-                cb(
-                    CreateAd(
-                        {
-                            id = id,
-                            author = char:getFullName(),
-                            number = char:GetData("phone"),
-                            date = data.date,
-                            title = data.title,
-                            message = data.message
-                        }
-                    )
-                )
-            end
+ESX.RegisterServerCallback(
+    "mythic_phone:server:NewAd",
+    function(source, data, cb)
+        local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(source):GetData("character")
+        local id = char:GetData("id")
+        cb(
+            CreateAd(
+                {
+                    id = id,
+                    author = char:getFullName(),
+                    number = char:GetData("phone"),
+                    date = data.date,
+                    title = data.title,
+                    message = data.message
+                }
+            )
         )
+    end
+)
 
-        ESX.RegisterServerCallback(
-            "mythic_phone:server:DeleteAd",
-            function(source, data, cb)
-                cb(DeleteAd(source))
-            end
-        )
+ESX.RegisterServerCallback(
+    "mythic_phone:server:DeleteAd",
+    function(source, data, cb)
+        cb(DeleteAd(source))
     end
 )

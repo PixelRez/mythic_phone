@@ -37,8 +37,8 @@ RegisterNUICallback(
     function(data, cb)
         ESX.TriggerServerCallback(
             "mythic_phone:server:NewTweet",
-            {message = data.message, mentions = data.mentions, hashtags = data.hashtags},
-            cb
+            cb,
+            {message = data.message, mentions = data.mentions, hashtags = data.hashtags}
         )
     end
 )

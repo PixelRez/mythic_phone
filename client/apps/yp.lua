@@ -31,13 +31,13 @@ AddEventHandler(
 RegisterNUICallback(
     "NewAd",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:NewAd", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:NewAd", cb, data)
     end
 )
 
 RegisterNUICallback(
     "DeleteAd",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:DeleteAd", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:DeleteAd", cb, data)
     end
 )

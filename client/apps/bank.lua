@@ -96,20 +96,20 @@ RegisterNUICallback(
 RegisterNUICallback(
     "GetBankTransactions",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:GetBankTransactions", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:GetBankTransactions", cb, data)
     end
 )
 
 RegisterNUICallback(
     "Transfer",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:Transfer", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:Transfer", cb, data)
     end
 )
 
 RegisterNUICallback(
     "MazePay",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:MazePay", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:MazePay", cb, data)
     end
 )

@@ -49,12 +49,13 @@ end
 --     end
 -- end)
 
-RegisterServerEvent("mythic_base:server:CharacterSpawned")
+RegisterServerEvent("serverCharacterSpawned")
 AddEventHandler(
-    "mythic_base:server:CharacterSpawned",
+    "serverCharacterSpawned",
     function()
         local src = source
-        local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
+        -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
+        local char = exports["utils"]:getIdentity(src)
 
         local unreads = Cache:Get("phone-unread")[char:GetData("id")]
         if unreads == nil then
@@ -135,7 +136,8 @@ AddEventHandler(
         ESX.RegisterServerCallback(
             "mythic_phone:server:SetUnread",
             function(source, data, cb)
-                local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(source):GetData("character")
+                -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(source):GetData("character")
+                local char = exports["utils"]:getIdentity(source)
 
                 local unreads = Cache:Get("phone-unread")[char:GetData("id")]
                 if unreads == nil then

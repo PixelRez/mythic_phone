@@ -59,7 +59,6 @@ RegisterNUICallback(
     function(data, cb)
         ESX.TriggerServerCallback(
             "mythic_phone:server:SetUnread",
-            data,
             function(status)
                 for k, v in ipairs(Config.Apps) do
                     if data.app == v.container then
@@ -67,7 +66,8 @@ RegisterNUICallback(
                     end
                 end
                 cb(status)
-            end
+            end,
+            data
         )
     end
 )

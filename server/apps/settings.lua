@@ -1,9 +1,10 @@
-RegisterServerEvent("mythic_base:server:CharacterSpawned")
+RegisterServerEvent("serverCharacterSpawned")
 AddEventHandler(
-    "mythic_base:server:CharacterSpawned",
+    "serverCharacterSpawned",
     function()
         local src = source
-        local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
+        -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
+        local char = exports["utils"]:getIdentity(src)
 
         local settings = Cache:Get("phone-settings")[char:GetData("id")]
         if settings == nil then
@@ -43,39 +44,34 @@ AddEventHandler(
     end
 )
 
-AddEventHandler(
-    "mythic_base:shared:ComponentsReady",
-    function()
-        -- Callbacks = Callbacks or exports['mythic_base']:FetchComponent('Callbacks')
-        Cache = Cache or exports["mythic_base"]:FetchComponent("Cache")
+-- REVISIT THIS LATER
+-- Cache = Cache or exports["mythic_base"]:FetchComponent("Cache")
 
-        Cache:Set(
-            "phone-settings",
-            {},
-            function(data)
-                for k, v in pairs(data) do
-                    if v.charid ~= nil and v.unread ~= nil then
-                        exports["ghmattimysql"]:execute(
-                            "INSERT INTO `phone_settings` (`charid`, `data`) VALUES (@charid, @data) ON DUPLICATE KEY UPDATE `data` = VALUES(`data`)",
-                            {
-                                ["charid"] = v.charid,
-                                ["data"] = json.encode(v.settings)
-                            }
-                        )
-                    end
-                end
-            end
-        )
+-- Cache:Set(
+--     "phone-settings",
+--     {},
+--     function(data)
+--         for k, v in pairs(data) do
+--             if v.charid ~= nil and v.unread ~= nil then
+--                exports["ghmattimysql"]:execute(
+--                     "INSERT INTO `phone_settings` (`charid`, `data`) VALUES (@charid, @data) ON DUPLICATE KEY UPDATE `data` = VALUES(`data`)",
+--                     {
+--                         ["charid"] = v.charid,
+--                         ["data"] = json.encode(v.settings)
+--                     }
+--                 )
+--             end
+--         end
+--     end
+-- )
 
-        ESX.RegisterServerCallback(
-            "mythic_phone:server:SaveSettings",
-            function(source, data, cb)
-                local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(source):GetData("character")
-                local settings = Cache:Get("phone-settings")[char:GetData("id")]
-                settings.settings = data
-                Cache.Update:Index("phone-settings", char:GetData("id"), settings)
-                cb(true)
-            end
-        )
-    end
-)
+-- ESX.RegisterServerCallback(
+--     "mythic_phone:server:SaveSettings",
+--     function(source, data, cb)
+--         local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(source):GetData("character")
+--         local settings = Cache:Get("phone-settings")[char:GetData("id")]
+--         settings.settings = data
+--         Cache.Update:Index("phone-settings", char:GetData("id"), settings)
+--         cb(true)
+--     end
+-- )

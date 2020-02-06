@@ -441,10 +441,10 @@ RegisterNUICallback(
 
         ESX.TriggerServerCallback(
             "mythic_phone:server:SaveTune",
-            {tune = data},
             function(status)
                 cb(status)
-            end
+            end,
+            {tune = data}
         )
     end
 )
@@ -454,10 +454,10 @@ RegisterNUICallback(
     function(data, cb)
         ESX.TriggerServerCallback(
             "mythic_phone:server:DeleteTune",
-            {id = data.id},
             function(status)
                 cb(status)
-            end
+            end,
+            {id = data.id}
         )
     end
 )
@@ -468,11 +468,11 @@ RegisterNUICallback(
         if currentVehicle ~= nil and currentVehicle ~= 0 then
             ESX.TriggerServerCallback(
                 "mythic_veh:server:GetVehicleHealth",
-                {plate = GetVehicleNumberPlateText(currentVehicle), model = GetEntityModel(currentVehicle)},
                 function(data)
                     print(json.encode(data))
                     cb(data)
-                end
+                end,
+                {plate = GetVehicleNumberPlateText(currentVehicle), model = GetEntityModel(currentVehicle)}
             )
         else
             cb(nil)

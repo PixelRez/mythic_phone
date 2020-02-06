@@ -22,6 +22,7 @@ AddEventHandler(
   function()
     chat("Player spawned", {0, 255, 0})
     isLoggedIn = true
+    TriggerServerEvent("serverCharacterSpawned")
     SendNUIMessage(
       {
         action = "SetServerID",
@@ -56,6 +57,10 @@ RegisterNetEvent("mythic_phone:client:SetupData")
 AddEventHandler(
   "mythic_phone:client:SetupData",
   function(data)
+    chat("DATA FROM CLIENT SETUPD DATA", {0, 255, 0})
+    chat(data[1].data.id, {0, 255, 0})
+    chat(data[1].data.name, {0, 255, 0})
+    chat(data[1].data.phone, {0, 255, 0})
     SendNUIMessage(
       {
         action = "setup",
@@ -260,12 +265,12 @@ RegisterNUICallback(
   function(data, cb)
     ESX.TriggerServerCallback(
       "mythic_phone:server:GetData",
-      {
-        key = data.key
-      },
       function(data)
         cb(data)
-      end
+      end,
+      {
+        key = data.key
+      }
     )
   end
 )

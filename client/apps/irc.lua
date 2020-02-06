@@ -22,27 +22,27 @@ AddEventHandler(
 RegisterNUICallback(
     "IRCJoinChannel",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:IRCJoinChannel", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:IRCJoinChannel", cb, data)
     end
 )
 
 RegisterNUICallback(
     "IRCLeaveChannel",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:IRCLeaveChannel", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:IRCLeaveChannel", cb, data)
     end
 )
 
 RegisterNUICallback(
     "IRCGetMessages",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:IRCGetMessages", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:IRCGetMessages", cb, data)
     end
 )
 
 RegisterNUICallback(
     "IRCNewMessage",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:IRCNewMessage", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:IRCNewMessage", cb, data)
     end
 )

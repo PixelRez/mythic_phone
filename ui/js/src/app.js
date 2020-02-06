@@ -115,7 +115,7 @@ function InitShit() {
   $(".tabs").tabs();
   //$('select').formSelect();
   $(".char-count-input").characterCounter();
-  $(".phone-number").mask("000-000-0000", { placeholder: "###-###-####" });
+  $(".phone-number").mask("000-0000", { placeholder: "###-####" });
 }
 
 $(function() {

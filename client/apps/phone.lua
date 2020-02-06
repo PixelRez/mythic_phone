@@ -198,8 +198,8 @@ RegisterNUICallback(
     function(data, cb)
         ESX.TriggerServerCallback(
             "mythic_phone:server:CreateCall",
-            {number = data.number, nonStandard = data.nonStandard},
-            cb
+            cb,
+            {number = data.number, nonStandard = data.nonStandard}
         )
     end
 )
@@ -244,7 +244,7 @@ RegisterNUICallback(
 RegisterNUICallback(
     "DeleteCallRecord",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:DeleteCallRecord", {id = data.id}, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:DeleteCallRecord", cb, {id = data.id})
     end
 )
 
@@ -262,7 +262,7 @@ AddEventHandler(
 )
 
 AddEventHandler(
-    "mythic_base:client:CharacterSpawned",
+    "playerSpawned",
     function()
         isLoggedIn = true
 

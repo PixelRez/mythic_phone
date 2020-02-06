@@ -21,7 +21,7 @@ RegisterNUICallback(
             Config.Settings.volume = 100
             TriggerServerEvent("mythic_sounds:server:PlayWithinDistance", 10.0, "unmute", 0.025)
         end
-        ESX.TriggerServerCallback("mythic_phone:server:SaveSettings", Config.Settings, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:SaveSettings", cb, Config.Settings)
     end
 )
 
@@ -29,6 +29,6 @@ RegisterNUICallback(
     "SaveSettings",
     function(data, cb)
         Config.Settings = data
-        ESX.TriggerServerCallback("mythic_phone:server:SaveSettings", Config.Settings, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:SaveSettings", cb, Config.Settings)
     end
 )

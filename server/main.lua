@@ -28,6 +28,13 @@ AddEventHandler(
     end
 )
 
+AddEventHandler(
+    "esx:playerLoaded",
+    function()
+        TriggerEvent("serverCharacterSpawned")
+    end
+)
+
 RegisterServerEvent("checkForPhone")
 AddEventHandler(
     "checkForPhone",
@@ -51,14 +58,14 @@ AddEventHandler(
     end
 )
 
-RegisterServerEvent("mythic_base:server:CharacterSpawned")
+RegisterServerEvent("serverCharacterSpawned")
 AddEventHandler(
-    "mythic_base:server:CharacterSpawned",
+    "serverCharacterSpawned",
     function()
+        print("character spawned or loaded, setup phone")
         local src = source
-        local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
-        local cData = char:GetData()
-
+        local cData = exports["utils"]:getIdentity(src)
+        print(exports["utils"]:tprint(cData))
         TriggerClientEvent(
             "mythic_phone:client:SetupData",
             src,
@@ -66,9 +73,9 @@ AddEventHandler(
                 {
                     name = "myData",
                     data = {
-                        id = cData.id,
-                        name = cData.firstName .. " " .. cData.lastName,
-                        phone = cData.phone
+                        id = cData.identifier,
+                        name = cData.firstname .. " " .. cData.lastname,
+                        phone = cData.phone_number_number
                     }
                 },
                 {name = "apps", data = Config.Apps}

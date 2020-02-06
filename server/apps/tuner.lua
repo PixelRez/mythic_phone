@@ -1,6 +1,6 @@
-RegisterServerEvent("mythic_base:server:CharacterSpawned")
+RegisterServerEvent("serverCharacterSpawned")
 AddEventHandler(
-    "mythic_base:server:CharacterSpawned",
+    "serverCharacterSpawned",
     function()
         local src = source
         local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
@@ -41,37 +41,30 @@ AddEventHandler(
     end
 )
 
-AddEventHandler(
-    "mythic_base:shared:ComponentsReady",
-    function()
-        -- Callbacks = Callbacks or exports['mythic_base']:FetchComponent('Callbacks')
-
-        ESX.RegisterServerCallback(
-            "mythic_phone:server:SaveTune",
-            function(source, data, cb)
-                local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(source):GetData("character")
-                exports["ghmattimysql"]:execute(
-                    "INSERT INTO phone_tuner (`charid`, `data`) VALUES(@charid, @data)",
-                    {["charid"] = char:GetData("id"), ["data"] = json.encode(data.tune)},
-                    function(response)
-                        data.tune.id = response.insertId
-                        cb(data.tune)
-                    end
-                )
+ESX.RegisterServerCallback(
+    "mythic_phone:server:SaveTune",
+    function(source, data, cb)
+        local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(source):GetData("character")
+        exports["ghmattimysql"]:execute(
+            "INSERT INTO phone_tuner (`charid`, `data`) VALUES(@charid, @data)",
+            {["charid"] = char:GetData("id"), ["data"] = json.encode(data.tune)},
+            function(response)
+                data.tune.id = response.insertId
+                cb(data.tune)
             end
         )
+    end
+)
 
-        ESX.RegisterServerCallback(
-            "mythic_phone:server:DeleteTune",
-            function(source, data, cb)
-                local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(source):GetData("character")
-                exports["ghmattimysql"]:execute(
-                    "DELETE FROM phone_tuner WHERE id = @id AND charid = @charid",
-                    {["id"] = data.id, ["charid"] = char:GetData("id")},
-                    function(response)
-                        cb(response.affectedRows > 0)
-                    end
-                )
+ESX.RegisterServerCallback(
+    "mythic_phone:server:DeleteTune",
+    function(source, data, cb)
+        local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(source):GetData("character")
+        exports["ghmattimysql"]:execute(
+            "DELETE FROM phone_tuner WHERE id = @id AND charid = @charid",
+            {["id"] = data.id, ["charid"] = char:GetData("id")},
+            function(response)
+                cb(response.affectedRows > 0)
             end
         )
     end

@@ -31,7 +31,6 @@ client_script {
 }
 
 server_script {
-    "@mysql-async/lib/MySQL.lua",
     "config/*.lua",
     "server/main.lua",
     "server/items.lua",
@@ -40,6 +39,7 @@ server_script {
 }
 
 dependencies {
+    "esx_identity",
     "mythic_notify",
     "mythic_progbar",
     "utils"

@@ -52,13 +52,13 @@ AddEventHandler(
 RegisterNUICallback(
     "DumpApp",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:DumpApp", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:DumpApp", cb, data)
     end
 )
 
 RegisterNUICallback(
     "EjectSDCard",
     function(data, cb)
-        ESX.TriggerServerCallback("mythic_phone:server:EjectSDCard", data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:EjectSDCard", cb, data)
     end
 )

@@ -34,7 +34,7 @@ var Apps = [
     icon: '<i class="fas fa-university"></i>',
     color: "#d7252a",
     unread: 0,
-    enabled: true,
+    enabled: false,
     customExit: true,
     dumpable: 0
   },
@@ -44,7 +44,7 @@ var Apps = [
     icon: '<i class="fab fa-twitter"></i>',
     color: "#039be5",
     unread: 0,
-    enabled: true,
+    enabled: false,
     dumpable: 0
   },
   {
@@ -53,7 +53,7 @@ var Apps = [
     icon: '<i class="fas fa-ad"></i>',
     color: "#f9a825",
     unread: 0,
-    enabled: true,
+    enabled: false,
     dumpable: 0
   },
   {
@@ -71,7 +71,7 @@ var Apps = [
     icon: '<i class="fas fa-download"></i>',
     color: "hsl(333, 100%, 50%)",
     unread: 0,
-    enabled: true,
+    enabled: false,
     dumpable: 1
   },
   {
@@ -80,7 +80,7 @@ var Apps = [
     icon: '<i class="fas fa-comment-slash"></i>',
     color: "#1de9b6",
     unread: 0,
-    enabled: true,
+    enabled: false,
     dumpable: 2
   },
   {
@@ -89,7 +89,7 @@ var Apps = [
     icon: '<i class="fas fa-tools"></i>',
     color: "#004d40",
     unread: 0,
-    enabled: true,
+    enabled: false,
     dumpable: 2
   }
 ];
