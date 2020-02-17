@@ -25,6 +25,9 @@ function SetupData(data) {
 }
 
 function StoreData(name, data) {
+  console.log("Store Data")
+  console.log(`name ${name}`)
+  console.log(JSON.stringify(data))
   window.localStorage.setItem(name, JSON.stringify(data));
 }
 
@@ -97,9 +100,6 @@ function StoreDataLua(key, data) {
 }
 
 function GetDataLua(key) {
-  console.log("GetDataLua resources/mythic_phone/ui/js/src/utils/data.js");
-  console.log("key");
-  console.log(JSON.stringify(key));
   $.post(
     Config.ROOT_ADDRESS + "/GetData",
     JSON.stringify({

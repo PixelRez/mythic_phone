@@ -27,7 +27,6 @@ $("#screen-content").on(
 
 $("#screen-content").on("submit", "#convo-add-contact", event => {
   event.preventDefault();
-  console.log("Clicked from convo add contact");
 
   let data = $(event.currentTarget).serializeArray();
 
@@ -40,7 +39,7 @@ $("#screen-content").on("submit", "#convo-add-contact", event => {
       name: name,
       number: number
     }),
-    function(status) {
+    function (status) {
       if (status) {
         if (contacts == null) {
           contacts = new Array();
@@ -85,10 +84,10 @@ $("#screen-content").on("submit", "#convo-new-text", event => {
     if (sent) {
       $(".convo-texts-list").append(
         '<div class="text me-sender"><span>' +
-          data[0].value +
-          "</span><p>" +
-          moment(Date.now()).fromNowOrNow() +
-          "</p></div>"
+        data[0].value +
+        "</span><p>" +
+        moment(Date.now()).fromNowOrNow() +
+        "</p></div>"
       );
 
       Notif.Alert("Message Sent");
@@ -118,14 +117,22 @@ $("#screen-content").on("click", "#convo-delete-all", e => {
     JSON.stringify({
       number: convoData.number
     }),
-    function(status) {
+    function (status) {
       if (status) {
-        let cleanedMsgs = messages.filter(
-          m => m.sender != convoData.number && m.receiver != convoData.number
-        );
+        let cleanedMsgs;
+        if (myNumber == convoData.number) {
+          cleanedMsgs = messages.filter(
+            m => m.sender != convoData.number
+          );
+        } else {
+          cleanedMsgs = messages.filter(
+            m => m.sender != convoData.number && m.receiver != convoData.number
+          );
+        }
+
         Data.StoreData("messages", cleanedMsgs);
         Notif.Alert("Conversation Deleted");
-        GoBack();
+        App.GoBack();
       } else {
         Notif.Alert("Error Deleting Conversation");
       }
@@ -142,20 +149,20 @@ function ReceiveText(sender, text) {
       if (contact != null) {
         $(".convo-texts-list").append(
           '<div class="text other-sender"><span class=" other-' +
-            contact.name[0] +
-            '">' +
-            text.message +
-            "</span><p>" +
-            moment(Date.now()).fromNowOrNow() +
-            "</p></div>"
+          contact.name[0] +
+          '">' +
+          text.message +
+          "</span><p>" +
+          moment(Date.now()).fromNowOrNow() +
+          "</p></div>"
         );
       } else {
         $(".convo-texts-list").append(
           '<div class="text other-sender"><span>' +
-            text.message +
-            "</span><p>" +
-            moment(Date.now()).fromNowOrNow() +
-            "</p></div>"
+          text.message +
+          "</span><p>" +
+          moment(Date.now()).fromNowOrNow() +
+          "</p></div>"
         );
       }
 
@@ -191,18 +198,10 @@ function ReceiveText(sender, text) {
 }
 
 window.addEventListener("message-convo-open-app", data => {
-  console.log("message-convo-open-app - opened the convo i think?");
-  console.log(JSON.stringify(data.detail));
   myNumber = Data.GetData("myData").phone;
-  // myNumber = "555-5555";
   contacts = Data.GetData("contacts");
   messages = Data.GetData("messages");
-  console.log("myNumber");
-  console.log(JSON.stringify(myNumber));
-  console.log("contacts");
-  console.log(JSON.stringify(contacts));
-  console.log("messages");
-  console.log(JSON.stringify(messages));
+
   $.post(
     Config.ROOT_ADDRESS + "/log",
     JSON.stringify({
@@ -217,8 +216,7 @@ window.addEventListener("message-convo-open-app", data => {
       (c.sender == data.detail.number && c.receiver == myNumber) ||
       (c.sender == myNumber && c.receiver == data.detail.number)
   );
-  console.log("texts");
-  console.log(JSON.stringify(texts));
+
   let contact = contacts.filter(c => c.number == data.detail.number)[0];
 
   if (contact != null) {
@@ -237,10 +235,10 @@ window.addEventListener("message-convo-open-app", data => {
     if (text.sender == myNumber) {
       $(".convo-texts-list").append(
         '<div class="text me-sender"><span>' +
-          text.message +
-          "</span><p>" +
-          moment(d).fromNowOrNow() +
-          "</p></div>"
+        text.message +
+        "</span><p>" +
+        moment(d).fromNowOrNow() +
+        "</p></div>"
       );
 
       // Just incase losers wanna send themselves a text
@@ -248,20 +246,20 @@ window.addEventListener("message-convo-open-app", data => {
         if (contact != null) {
           $(".convo-texts-list").append(
             '<div class="text other-sender"><span class=" other-' +
-              contact.name[0] +
-              '">' +
-              text.message +
-              "</span><p>" +
-              moment(d).fromNowOrNow() +
-              "</p></div>"
+            contact.name[0] +
+            '">' +
+            text.message +
+            "</span><p>" +
+            moment(d).fromNowOrNow() +
+            "</p></div>"
           );
         } else {
           $(".convo-texts-list").append(
             '<div class="text other-sender"><span>' +
-              text.message +
-              "</span><p>" +
-              moment(d).fromNowOrNow() +
-              "</p></div>"
+            text.message +
+            "</span><p>" +
+            moment(d).fromNowOrNow() +
+            "</p></div>"
           );
         }
       }
@@ -269,20 +267,20 @@ window.addEventListener("message-convo-open-app", data => {
       if (contact != null) {
         $(".convo-texts-list").append(
           '<div class="text other-sender"><span class=" other-' +
-            contact.name[0] +
-            '">' +
-            text.message +
-            "</span><p>" +
-            moment(d).fromNowOrNow() +
-            "</p></div>"
+          contact.name[0] +
+          '">' +
+          text.message +
+          "</span><p>" +
+          moment(d).fromNowOrNow() +
+          "</p></div>"
         );
       } else {
         $(".convo-texts-list").append(
           '<div class="text other-sender"><span>' +
-            text.message +
-            "</span><p>" +
-            moment(d).fromNowOrNow() +
-            "</p></div>"
+          text.message +
+          "</span><p>" +
+          moment(d).fromNowOrNow() +
+          "</p></div>"
         );
       }
     }

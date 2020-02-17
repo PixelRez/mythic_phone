@@ -9,11 +9,15 @@ var myNumber = null;
 var contacts = null;
 var messages = null;
 
-$("#screen-content").on("click", ".messages-list .message", event => {
-  console.log("messageslist maybe for the single person?");
-  console.log($(event.currentTarget).data("message"));
-  console.log(JSON.stringify($(event.currentTarget).data("message")));
+window.addEventListener("message", event => {
+  switch (event.data.action) {
+    case "receiveText":
+      App.RefreshApp();
+      break;
+  }
+});
 
+$("#screen-content").on("click", ".messages-list .message", event => {
   App.OpenApp(
     "message-convo",
     $(event.currentTarget).data("message"),
@@ -103,26 +107,26 @@ window.addEventListener("message-open-app", data => {
     if (contact == null) {
       $("#message-container .inner-app .messages-list").append(
         '<div class="message waves-effect"><div class="text-avatar">#</div><div class="text-name">' +
-          message.number +
-          '</div><div class="text-message">' +
-          message.message +
-          '</div><div class="text-time">' +
-          moment(message.time).fromNowOrNow() +
-          "</div></div>"
+        message.number +
+        '</div><div class="text-message">' +
+        message.message +
+        '</div><div class="text-time">' +
+        moment(message.time).fromNowOrNow() +
+        "</div></div>"
       );
     } else {
       $("#message-container .inner-app .messages-list").append(
         '<div class="message waves-effect"><div class="text-avatar other-' +
-          contact.name[0].toString().toLowerCase() +
-          '">' +
-          contact.name[0] +
-          '</div><div class="text-name">' +
-          contact.name +
-          '</div><div class="text-message"> ' +
-          message.message +
-          '</div><div class="text-time">' +
-          moment(message.time).fromNowOrNow() +
-          "</div></div>"
+        contact.name[0].toString().toLowerCase() +
+        '">' +
+        contact.name[0] +
+        '</div><div class="text-name">' +
+        contact.name +
+        '</div><div class="text-message"> ' +
+        message.message +
+        '</div><div class="text-time">' +
+        moment(message.time).fromNowOrNow() +
+        "</div></div>"
       );
     }
 
@@ -136,12 +140,12 @@ window.addEventListener("message-open-app", data => {
   $.each(contacts, (index, contact) => {
     $("#message-new-contact").append(
       '<option value="' +
-        contact.number +
-        '">' +
-        contact.name +
-        " (" +
-        contact.number +
-        ")</option>"
+      contact.number +
+      '">' +
+      contact.name +
+      " (" +
+      contact.number +
+      ")</option>"
     );
   });
 
@@ -150,17 +154,13 @@ window.addEventListener("message-open-app", data => {
 });
 
 function SendNewText(data, cb) {
-  console.log(
-    "SendNewText data From mythic_phone/ui/js/src/apps/messages/messages.js"
-  );
-  console.log(JSON.stringify(data));
   $.post(
     Config.ROOT_ADDRESS + "/SendText",
     JSON.stringify({
       receiver: data[0].value,
       message: data[1].value
     }),
-    function(textData) {
+    function (textData) {
       if (textData != null) {
         if (messages == null) {
           messages = new Array();

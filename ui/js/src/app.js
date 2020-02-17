@@ -19,7 +19,7 @@ var appTrail = [
   }
 ];
 
-moment.fn.fromNowOrNow = function(a) {
+moment.fn.fromNowOrNow = function (a) {
   if (Math.abs(moment().diff(this)) < 60000) {
     return "just now";
   }
@@ -119,7 +119,7 @@ function InitShit() {
   $(".phone-number").mask("000-0000", { placeholder: "###-####" });
 }
 
-$(function() {
+$(function () {
   let settings = Data.GetData("settings");
 
   Utils.UpdateWallpaper(`url(./imgs/back00${settings.wallpaper}.png)`);
@@ -213,7 +213,7 @@ function SetupApp(app, data, pop, disableFade, exit) {
     cache: false,
     dataType: "html",
     statusCode: {
-      404: function() {
+      404: function () {
         console.log("ajax Post fail");
         appTrail.push({ app: app, data: null, fade: false, close: exit });
         Notif.Alert("App Doesn't Exist", 1000);
@@ -222,7 +222,7 @@ function SetupApp(app, data, pop, disableFade, exit) {
       }
     },
 
-    success: function(response) {
+    success: function (response) {
       console.log("ajax Post success");
       console.log("response");
       console.log(JSON.stringify(response));
@@ -359,6 +359,13 @@ function OpenApp(
 }
 
 function RefreshApp() {
+  // This is here to update the text-messages list when you receive a text.
+  if (`${appTrail[appTrail.length - 1].app}-open-app` === "message-open-app") {
+    window.dispatchEvent(
+      new CustomEvent(`${appTrail[appTrail.length - 1].app}-open-app`, { detail: [appTrail[appTrail.length - 1].data] })
+    );
+  }
+
   $(".material-tooltip").remove();
   $("#screen-content").trigger(
     `${appTrail[appTrail.length - 1].app}-open-app`,

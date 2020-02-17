@@ -42,7 +42,21 @@ RegisterNUICallback(
 RegisterCommand(
     "sendText",
     function()
-        local data = {receiver = "555-5550", message = "Something here plz"}
+        local data = {receiver = "555-5555", message = "Something here plz"}
         ESX.TriggerServerCallback("mythic_phone:server:SendText", true, data)
     end
 )
+
+Citizen.CreateThread(
+    function()
+        local i = 0;
+        -- set this to true if you want to test getting text messages
+    while false do
+        print('inside while true do')
+        local data = {receiver = "555-5555", message = "Something here plz " .. i}
+        ESX.TriggerServerCallback("mythic_phone:server:SendText", true, data)
+        print("hopefully waiting 5 seconds")
+        i = i+1
+        Citizen.Wait(5000)
+    end
+end)

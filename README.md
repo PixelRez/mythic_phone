@@ -4,11 +4,8 @@ This is a custom phone written for Mythic RP. It is replacing an existing port o
 
 ## Dependencies
 
-- Mythic Base | Not Released
-- Mythic Inventory | Not Released
-- Mythic Sounds | Not Released (Modified [InteractSound](https://github.com/plunkettscott/interact-sound))
+- [InteractSound](https://github.com/plunkettscott/interact-sound))
 - [GHMattiMySQL](https://github.com/GHMatti/ghmattimysql)
-- ???
 
 > This is a WIP resource so this dependency list is very likely to expand as features are added.
 
@@ -20,12 +17,35 @@ tPlayer:GetData("source") ---> local tPlayerSourceID = ESX.GetPlayerFromIdentifi
 ### TODO
 
 Text Messages:
-Text messages dont update the messages list when on it
-Toast message needs to be click throughable
 Unread messages Indicator at the bottom
 
 Calls:
 E to hold G to hangup dont work
+
+### Testing
+Calls : 
+    Mute
+    Hangup
+    Call : 
+      Contacts
+      History
+    Answer
+    Talking
+    Delete
+
+Messages :
+    Send
+    Receive
+    Delete
+    Call
+
+Contacts :
+    Add
+    Delete
+    Edit
+    Call
+    Message
+    Search
 
 ### Comments
 

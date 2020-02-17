@@ -121,6 +121,7 @@ Citizen.CreateThread(
         DisableControlAction(0, 199, true)
         DisableControlAction(0, 26, true)
         DisableControlAction(0, 0, true)
+        DisableControlAction(0, 37, true) -- Weapon wheel scroll
       end
 
       if counter <= 0 then
