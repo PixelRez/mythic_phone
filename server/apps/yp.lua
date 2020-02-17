@@ -33,13 +33,14 @@ AddEventHandler(
     end
 )
 
-RegisterServerEvent("serverCharacterSpawned")
-AddEventHandler(
-    "serverCharacterSpawned",
-    function()
-        TriggerClientEvent("mythic_phone:client:SetupData", source, {{name = "adverts", data = Advertisements}})
-    end
-)
+-- Uncomment when ready to implement this
+-- RegisterServerEvent("serverCharacterSpawned")
+-- AddEventHandler(
+--     "serverCharacterSpawned",
+--     function()
+--         TriggerClientEvent("mythic_phone:client:SetupData", source, {{name = "adverts", data = Advertisements}})
+--     end
+-- )
 
 AddEventHandler(
     "playerDropped",

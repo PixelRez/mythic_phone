@@ -3,18 +3,21 @@ Calls = {}
 function CreateCallRecord(sender, receiver, state)
 end
 
+-- print("mythic_phone/server/apps/phone.lua Calls")
+-- print(exports["utils"]:tprint(Calls))
+
 AddEventHandler(
     "playerDropped",
     function(source)
-        local mPlayer = source
-        if mPlayer ~= nil then
-            local char = mPlayer:GetData("character")
-            local cData = char:GetData()
+        local src = source
+        if src ~= nil then
+            local cData = exports["utils"]:getIdentity(src)
 
             if Calls[cData.phone_number] ~= nil then
-                local tPlayer = exports["mythic_base"]:FetchComponent("Fetch"):Phone(Calls[cData.phone_number].number)
-                if tPlayer ~= nil then
-                    TriggerClientEvent("mythic_phone:client:EndCall", tPlayer:GetData("source"))
+                local tPlayerId = exports["utils"]:getIdentifierByPhoneNumber(Calls[cData.phone_number].number)
+                if tPlayerId ~= nil then
+                    local tPlayerSourceID = ESX.GetPlayerFromIdentifier(tPlayerId).source
+                    TriggerClientEvent("mythic_phone:client:EndCall", tPlayerSourceID)
                 else
                     Calls[Calls[cData.phone_number].number] = nil
                 end
@@ -29,9 +32,10 @@ AddEventHandler(
     "serverCharacterSpawned",
     function()
         local src = source
-        -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
-        -- local cData = char:GetData()
         local cData = exports["utils"]:getIdentity(src)
+        -- print("mythic_phone/server/apps/phone.lua serverCharacterSpawned")
+        -- print("cData")
+        -- print(exports["utils"]:tprint(cData))
 
         Citizen.CreateThread(
             function()
@@ -49,20 +53,34 @@ AddEventHandler(
 
 ESX.RegisterServerCallback(
     "mythic_phone:server:CreateCall",
-    function(source, data, cb)
+    function(source, cb, data)
+        local src = source
         local cData = exports["utils"]:getIdentity(src)
 
-        local tPlayer = exports["mythic_base"]:FetchComponent("Fetch"):Phone(data.number)
-        if tPlayer ~= nil then
-            if tPlayer:GetData("source") ~= nil then
+        -- print("mythic_phone:server:CreateCall")
+        -- print("Source")
+        -- print(src)
+        -- print("Character Data")
+        -- print(exports["utils"]:tprint(cData))
+        -- print("Callback Data")
+        -- print(exports["utils"]:tprint(cb))
+        -- print("GETTING FULLNAME")
+        -- print(getFullName(cData))
+
+        local tPlayerId = exports["utils"]:getIdentifierByPhoneNumber(data.number)
+        if tPlayerId ~= nil then
+            local tPlayerSourceID = ESX.GetPlayerFromIdentifier(tPlayerId).source
+            -- local tPlayerSourceID = 1
+            -- if tPlayerSourceID ~= nil then -- Add ability to call self
+            if tPlayerSourceID ~= nil and tPlayerSourceID ~= src then -- Remove ability to call self
                 if Calls[data.number] ~= nil then
                     cb(-3)
                     TriggerClientEvent(
                         "mythic_notify:client:SendAlert",
-                        tPlayer:GetData("source"),
+                        tPlayerSourceID,
                         {
                             type = "inform",
-                            text = char:getFullName() .. " Tried Calling You, Sending Busy Response"
+                            text = getFullName(cData) .. " Tried Calling You, Sending Busy Response"
                         }
                     )
                 else
@@ -82,12 +100,12 @@ ESX.RegisterServerCallback(
                                 if data.nonStandard then
                                     TriggerClientEvent(
                                         "mythic_phone:client:ReceiveCall",
-                                        tPlayer:GetData("source"),
+                                        tPlayerSourceID,
                                         "Anonymous Caller"
                                     )
                                     TriggerClientEvent(
                                         "mythic_notify:client:PersistentAlert",
-                                        tPlayer:GetData("source"),
+                                        tPlayerSourceID,
                                         {
                                             id = Config.IncomingNotifId,
                                             action = "start",
@@ -99,17 +117,17 @@ ESX.RegisterServerCallback(
                                 else
                                     TriggerClientEvent(
                                         "mythic_phone:client:ReceiveCall",
-                                        tPlayer:GetData("source"),
+                                        tPlayerSourceID,
                                         cData.phone_number
                                     )
                                     TriggerClientEvent(
                                         "mythic_notify:client:PersistentAlert",
-                                        tPlayer:GetData("source"),
+                                        tPlayerSourceID,
                                         {
                                             id = Config.IncomingNotifId,
                                             action = "start",
                                             type = "inform",
-                                            text = char:getFullName() .. " Is Calling You",
+                                            text = getFullName(cData) .. " Is Calling You",
                                             style = {["background-color"] = "#ff8555", ["color"] = "#ffffff"}
                                         }
                                     )
@@ -142,7 +160,7 @@ ESX.RegisterServerCallback(
 
 ESX.RegisterServerCallback(
     "mythic_phone:server:DeleteCallRecord",
-    function(source, data, cb)
+    function(source, cb, data)
         local cData = exports["utils"]:getIdentity(src)
 
         exports["ghmattimysql"]:execute(
@@ -191,8 +209,10 @@ AddEventHandler(
         -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
         -- local cData = char:GetData()
         local cData = exports["utils"]:getIdentity(src)
-        local tPlayer = exports["mythic_base"]:FetchComponent("Fetch"):Phone(Calls[call.number].number)
-        TriggerClientEvent("mythic_phone:client:OtherToggleHold", tPlayer:GetData("source"))
+
+        local tPlayerId = exports["utils"]:getIdentifierByPhoneNumber(Calls[cData.phone_number].number)
+        local tPlayerSourceID = ESX.GetPlayerFromIdentifier(tPlayerId).source
+        TriggerClientEvent("mythic_phone:client:OtherToggleHold", tPlayerSourceID)
     end
 )
 
@@ -200,30 +220,32 @@ RegisterServerEvent("mythic_phone:server:AcceptCall")
 AddEventHandler(
     "mythic_phone:server:AcceptCall",
     function()
+        print("Inside Server AcceptCall")
         local src = source
         -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
         -- local cData = char:GetData()
         local cData = exports["utils"]:getIdentity(src)
+        -- print("Character Data")
+        -- print(exports["utils"]:tprint(cData))
+        -- print("Calls")
+        -- print(exports["utils"]:tprint(Calls))
 
         if Calls[cData.phone_number] ~= nil then
-            local tPlayer = exports["mythic_base"]:FetchComponent("Fetch"):Phone(Calls[cData.phone_number].number)
-            if tPlayer ~= nil then
+            -- local tPlayer = exports["mythic_base"]:FetchComponent("Fetch"):Phone(Calls[cData.phone_number].number)
+            local tPlayerId = exports["utils"]:getIdentifierByPhoneNumber(Calls[cData.phone_number].number)
+            if tPlayerId ~= nil then
+                local tPlayerSourceID = ESX.GetPlayerFromIdentifier(tPlayerId).source
                 if (Calls[cData.phone_number].number ~= nil) and (Calls[Calls[cData.phone_number].number].number ~= nil) then
                     Calls[Calls[cData.phone_number].number].status = 1
                     Calls[cData.phone_number].status = 1
 
-                    TriggerClientEvent("mythic_phone:client:AcceptCall", src, (tPlayer:GetData("source") + 100), false)
-                    TriggerClientEvent(
-                        "mythic_phone:client:AcceptCall",
-                        tPlayer:GetData("source"),
-                        (tPlayer:GetData("source") + 100),
-                        true
-                    )
+                    TriggerClientEvent("mythic_phone:client:AcceptCall", src, (tPlayerSourceID + 100), false)
+                    TriggerClientEvent("mythic_phone:client:AcceptCall", tPlayerSourceID, (tPlayerSourceID + 100), true)
                 else
                     Calls[Calls[cData.phone_number].number] = nil
                     Calls[cData.phone_number] = nil
                     TriggerClientEvent("mythic_phone:client:EndCall", src)
-                    TriggerClientEvent("mythic_phone:client:EndCall", tPlayer:GetData("source"))
+                    TriggerClientEvent("mythic_phone:client:EndCall", tPlayerSourceID)
                 end
             else
                 TriggerClientEvent("mythic_phone:client:EndCall", src)
@@ -235,7 +257,7 @@ AddEventHandler(
 RegisterServerEvent("mythic_phone:server:EndCall")
 AddEventHandler(
     "mythic_phone:server:EndCall",
-    function()
+    function(data)
         local src = source
 
         -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
@@ -243,14 +265,25 @@ AddEventHandler(
         local cData = exports["utils"]:getIdentity(src)
 
         if Calls[cData.phone_number] ~= nil then
-            local tPlayer = exports["mythic_base"]:FetchComponent("Fetch"):Phone(Calls[cData.phone_number].number)
-            if tPlayer ~= nil then
+            local tPlayerId = exports["utils"]:getIdentifierByPhoneNumber(Calls[cData.phone_number].number)
+
+            -- local tPlayer = exports["mythic_base"]:FetchComponent("Fetch"):Phone(Calls[cData.phone_number].number)
+            if tPlayerId ~= nil then
+                local tPlayerSourceID = ESX.GetPlayerFromIdentifier(tPlayerId).source
+                -- local tPlayerSourceID = 1
+
                 Calls[Calls[cData.phone_number].number] = nil
                 Calls[cData.phone_number] = nil
 
                 TriggerClientEvent("mythic_phone:client:EndCall", src)
-                TriggerClientEvent("mythic_phone:client:EndCall", tPlayer:GetData("source"))
+                TriggerClientEvent("mythic_phone:client:EndCall", tPlayerSourceID)
             end
         end
     end
 )
+
+function getFullName(char)
+    if char ~= nil then
+        return char.firstname .. " " .. char.lastname
+    end
+end

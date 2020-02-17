@@ -1,4 +1,5 @@
 Call = {}
+
 local isLoggedIn = false
 
 local Ringtones = {
@@ -10,10 +11,27 @@ function IsInCall()
     return (Call.number ~= nil and Call.status == 1) or (Call.number ~= nil and Call.status == 0 and Call.initiator)
 end
 
+function chat(str, color)
+    TriggerEvent("chat:addMessage", {color = color, multiline = true, args = {str}})
+end
+
+-- Citizen.CreateThread(
+--     function()
+--         while true do
+--             chat("while true do", {0, 255, 0})
+--             chat(Call.number)
+--             chat(Call.status)
+--             print(exports["utils"]:tprint(Call))
+--             Citizen.Wait(1000)
+--         end
+--     end
+-- )
+
 RegisterNetEvent("mythic_phone:client:CreateCall")
 AddEventHandler(
     "mythic_phone:client:CreateCall",
     function(number)
+        chat("calling number " .. number)
         Call.number = number
         Call.status = 0
         Call.initiator = true
@@ -33,6 +51,7 @@ AddEventHandler(
         Citizen.CreateThread(
             function()
                 while Call.status == 0 do
+                    -- chat("Call.status == 0", {0, 255, 0})
                     if count >= 30 then
                         TriggerServerEvent("mythic_phone:server:EndCall")
                         TriggerEvent("mythic_sounds:client:StopOnOne", "dialtone")
@@ -58,6 +77,10 @@ RegisterNetEvent("mythic_phone:client:AcceptCall")
 AddEventHandler(
     "mythic_phone:client:AcceptCall",
     function(channel, initiator)
+        print("CHANNEL IS")
+        print(channel)
+        print("INITITATOR IS")
+        print(initiator)
         if Call.number ~= nil and Call.status == 0 then
             Call.status = 1
             Call.channel = channel
@@ -97,8 +120,8 @@ AddEventHandler(
                 )
             end
 
-            TriggerEvent("mythic_sounds:client:StopOnOne", "dialtone")
-            TriggerServerEvent("mythic_sounds:server:StopWithinDistance", "ringtone2")
+        -- TriggerEvent("mythic_sounds:client:StopOnOne", "dialtone")
+        -- TriggerServerEvent("mythic_sounds:server:StopWithinDistance", "ringtone2")
         end
     end
 )
@@ -113,8 +136,8 @@ AddEventHandler(
             }
         )
 
-        TriggerEvent("mythic_sounds:client:StopOnOne", "dialtone")
-        TriggerServerEvent("mythic_sounds:server:StopWithinDistance", "ringtone2")
+        -- TriggerEvent("mythic_sounds:client:StopOnOne", "dialtone")
+        -- TriggerServerEvent("mythic_sounds:server:StopWithinDistance", "ringtone2")
         exports["mythic_notify"]:SendAlert(
             "inform",
             "Call Ended",
@@ -135,10 +158,19 @@ AddEventHandler(
     end
 )
 
+RegisterCommand(
+    "receive",
+    function()
+        TriggerEvent("mythic_phone:client:ReceiveCall", "555-5553")
+    end
+)
+
 RegisterNetEvent("mythic_phone:client:ReceiveCall")
 AddEventHandler(
     "mythic_phone:client:ReceiveCall",
     function(number)
+        chat("are we receiving?")
+        chat(number)
         Call.number = number
         Call.status = 0
         Call.initiator = false
@@ -204,16 +236,25 @@ RegisterNUICallback(
     end
 )
 
+RegisterCommand(
+    "call",
+    function(data, cb)
+        ESX.TriggerServerCallback("mythic_phone:server:CreateCall", cb, {number = "555-5553", nonStandard = 1})
+    end
+)
+
 RegisterNUICallback(
     "AcceptCall",
     function(data, cb)
-        TriggerServerEvent("mythic_phone:server:AcceptCall")
+        chat("AcceptCall in NUI Client Event phone.lua")
+        TriggerServerEvent("mythic_phone:server:AcceptCall", data)
     end
 )
 
 RegisterNUICallback(
     "EndCall",
     function(data, cb)
+        chat("EndCall in NUI Client Event phone.lua")
         TriggerServerEvent("mythic_phone:server:EndCall", Call)
     end
 )
@@ -225,7 +266,7 @@ RegisterNUICallback(
             Call.Hold = not Call.Hold
             TriggerServerEvent("mythic_phone:server:ToggleHold", Call)
             if Call.Hold then
-                exports["tokovoip_script"]:removePlayerFromRadio(Call.channel)
+                exports.tokovoip_script:removePlayerFromRadio(Call.channel)
                 if isPhoneOpen then
                     PhoneCallToText()
                 else
@@ -274,7 +315,7 @@ AddEventHandler(
                             Call.Hold = not Call.Hold
                             TriggerServerEvent("mythic_phone:server:ToggleHold", Call)
                             if Call.Hold then
-                                exports["tokovoip_script"]:removePlayerFromRadio(Call.channel)
+                                exports.tokovoip_script:removePlayerFromRadio(Call.channel)
                                 if isPhoneOpen then
                                     PhoneCallToText()
                                 else

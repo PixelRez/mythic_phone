@@ -26,6 +26,8 @@ AddEventHandler(
 RegisterNUICallback(
     "SendText",
     function(data, cb)
+        -- print("SendText data resources/mythic_phone/client/apps/messages.lua")
+        -- print(exports["utils"]:tprint(data))
         ESX.TriggerServerCallback("mythic_phone:server:SendText", cb, data)
     end
 )
@@ -34,5 +36,13 @@ RegisterNUICallback(
     "DeleteConversation",
     function(data, cb)
         ESX.TriggerServerCallback("mythic_phone:server:DeleteConversation", cb, data)
+    end
+)
+
+RegisterCommand(
+    "sendText",
+    function()
+        local data = {receiver = "555-5550", message = "Something here plz"}
+        ESX.TriggerServerCallback("mythic_phone:server:SendText", true, data)
     end
 )

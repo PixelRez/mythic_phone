@@ -1,21 +1,22 @@
-RegisterServerEvent("serverCharacterSpawned")
-AddEventHandler(
-    "serverCharacterSpawned",
-    function()
-        local src = source
-        Citizen.CreateThread(
-            function()
-                exports["ghmattimysql"]:execute(
-                    "SELECT * FROM phone_tweets ORDER BY time DESC",
-                    {},
-                    function(tweets)
-                        TriggerClientEvent("mythic_phone:client:SetupData", src, {{name = "tweets", data = tweets}})
-                    end
-                )
-            end
-        )
-    end
-)
+-- Uncomment when ready to implement this
+-- RegisterServerEvent("serverCharacterSpawned")
+-- AddEventHandler(
+--     "serverCharacterSpawned",
+--     function()
+--         local src = source
+--         Citizen.CreateThread(
+--             function()
+--                 exports["ghmattimysql"]:execute(
+--                     "SELECT * FROM phone_tweets ORDER BY time DESC",
+--                     {},
+--                     function(tweets)
+--                         TriggerClientEvent("mythic_phone:client:SetupData", src, {{name = "tweets", data = tweets}})
+--                     end
+--                 )
+--             end
+--         )
+--     end
+-- )
 
 ESX.RegisterServerCallback(
     "mythic_phone:server:NewTweet",

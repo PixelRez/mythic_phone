@@ -191,17 +191,34 @@ function ReceiveText(sender, text) {
 }
 
 window.addEventListener("message-convo-open-app", data => {
+  console.log("message-convo-open-app - opened the convo i think?");
+  console.log(JSON.stringify(data.detail));
   myNumber = Data.GetData("myData").phone;
+  // myNumber = "555-5555";
   contacts = Data.GetData("contacts");
   messages = Data.GetData("messages");
+  console.log("myNumber");
+  console.log(JSON.stringify(myNumber));
+  console.log("contacts");
+  console.log(JSON.stringify(contacts));
+  console.log("messages");
+  console.log(JSON.stringify(messages));
+  $.post(
+    Config.ROOT_ADDRESS + "/log",
+    JSON.stringify({
+      text: JSON.stringify(messages)
+    })
+  );
 
   $("#message-convo-container").data("data", data.detail);
 
   let texts = messages.filter(
     c =>
-      (c.sender == data.number && c.receiver == myNumber) ||
+      (c.sender == data.detail.number && c.receiver == myNumber) ||
       (c.sender == myNumber && c.receiver == data.detail.number)
   );
+  console.log("texts");
+  console.log(JSON.stringify(texts));
   let contact = contacts.filter(c => c.number == data.detail.number)[0];
 
   if (contact != null) {

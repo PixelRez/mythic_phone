@@ -1,52 +1,47 @@
-RegisterServerEvent("serverCharacterSpawned")
-AddEventHandler(
-    "serverCharacterSpawned",
-    function()
-        local src = source
-        -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
-        local char = exports["utils"]:getIdentity(src)
-
-        local settings = Cache:Get("phone-settings")[char:GetData("id")]
-        if settings == nil then
-            exports["ghmattimysql"]:scalar(
-                "SELECT data FROM phone_settings WHERE charid = @charid",
-                {["charid"] = char:GetData("id")},
-                function(dbSettings)
-                    if dbSettings ~= nil and json.decode(dbSettings) ~= nil then
-                        settings = {
-                            charid = char:GetData("id"),
-                            settings = json.decode(dbSettings)
-                        }
-                        Cache.Add:Index("phone-settings", char:GetData("id"), settings)
-                    else
-                        settings = {
-                            charid = char:GetData("id"),
-                            settings = {
-                                volume = 100,
-                                wallpaper = 1,
-                                ringtone = 1,
-                                text = 1
-                            }
-                        }
-
-                        Cache.Add:Index("phone-settings", char:GetData("id"), default)
-                    end
-                end
-            )
-        end
-
-        while settings == nil do
-            Citizen.Wait(10)
-        end
-
-        TriggerClientEvent("mythic_phone:client:SetSettings", src, settings.settings)
-        TriggerClientEvent("mythic_phone:client:SetupData", src, {{name = "settings", data = settings.settings}})
-    end
-)
-
+-- Uncomment when ready to implement this
+-- RegisterServerEvent("serverCharacterSpawned")
+-- AddEventHandler(
+--     "serverCharacterSpawned",
+--     function()
+--         local src = source
+--         -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
+--         local char = exports["utils"]:getIdentity(src)
+--         local settings = Cache:Get("phone-settings")[char:GetData("id")]
+--         if settings == nil then
+--             exports["ghmattimysql"]:scalar(
+--                 "SELECT data FROM phone_settings WHERE charid = @charid",
+--                 {["charid"] = char:GetData("id")},
+--                 function(dbSettings)
+--                     if dbSettings ~= nil and json.decode(dbSettings) ~= nil then
+--                         settings = {
+--                             charid = char:GetData("id"),
+--                             settings = json.decode(dbSettings)
+--                         }
+--                         Cache.Add:Index("phone-settings", char:GetData("id"), settings)
+--                     else
+--                         settings = {
+--                             charid = char:GetData("id"),
+--                             settings = {
+--                                 volume = 100,
+--                                 wallpaper = 1,
+--                                 ringtone = 1,
+--                                 text = 1
+--                             }
+--                         }
+--                         Cache.Add:Index("phone-settings", char:GetData("id"), default)
+--                     end
+--                 end
+--             )
+--         end
+--         while settings == nil do
+--             Citizen.Wait(10)
+--         end
+--         TriggerClientEvent("mythic_phone:client:SetSettings", src, settings.settings)
+--         TriggerClientEvent("mythic_phone:client:SetupData", src, {{name = "settings", data = settings.settings}})
+--     end
+-- )
 -- REVISIT THIS LATER
 -- Cache = Cache or exports["mythic_base"]:FetchComponent("Cache")
-
 -- Cache:Set(
 --     "phone-settings",
 --     {},
@@ -64,7 +59,6 @@ AddEventHandler(
 --         end
 --     end
 -- )
-
 -- ESX.RegisterServerCallback(
 --     "mythic_phone:server:SaveSettings",
 --     function(source, data, cb)

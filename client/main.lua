@@ -58,7 +58,6 @@ AddEventHandler(
   "mythic_phone:client:SetupData",
   function(data)
     chat("DATA FROM CLIENT SETUPD DATA", {0, 255, 0})
-    chat(data[1].data.id, {0, 255, 0})
     chat(data[1].data.name, {0, 255, 0})
     chat(data[1].data.phone, {0, 255, 0})
     SendNUIMessage(
@@ -111,7 +110,8 @@ Citizen.CreateThread(
     while true do
       if IsDisabledControlJustReleased(1, 170) or IsControlJustReleased(1, 170) then
         TriggerEvent("chatMessage", "[Server]", {255, 255, 0}, "Key Pressed")
-        TriggerServerEvent("checkForPhone")
+        -- TriggerServerEvent("checkForPhone") -- Eventually check if person has a phone
+        TriggerEvent("togglePhone")
       end
 
       if isPhoneOpen then
@@ -141,13 +141,14 @@ Citizen.CreateThread(
   end
 )
 
-RegisterNetEvent("noPhone")
-AddEventHandler(
-  "noPhone",
-  function()
-    exports["mythic_notify"]:SendAlert("error", "No phone")
-  end
-)
+-- Uncomment this when phone is an item
+-- RegisterNetEvent("noPhone")
+-- AddEventHandler(
+--   "noPhone",
+--   function()
+--     exports["mythic_notify"]:SendAlert("error", "No phone")
+--   end
+-- )
 
 RegisterNetEvent("togglePhone")
 AddEventHandler(

@@ -126,57 +126,58 @@ TriggerEvent(
     end
 )
 
-RegisterServerEvent("serverCharacterSpawned")
-AddEventHandler(
-    "serverCharacterSpawned",
-    function()
-        local src = source
-        Citizen.Wait(100) -- Try to ensure we're waiting until thd base action happens
-        local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
-        local cData = char:GetData()
+-- Uncomment when ready to implement this
+-- RegisterServerEvent("serverCharacterSpawned")
+-- AddEventHandler(
+--     "serverCharacterSpawned",
+--     function()
+--         local src = source
+--         Citizen.Wait(100) -- Try to ensure we're waiting until thd base action happens
+--         local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
+--         local cData = char:GetData()
 
-        Citizen.CreateThread(
-            function()
-                exports["ghmattimysql"]:execute(
-                    "SELECT app, state FROM phone_apps WHERE charid = @charid",
-                    {["charid"] = char:GetData("id")},
-                    function(apps)
-                        local states = {}
+--         Citizen.CreateThread(
+--             function()
+--                 exports["ghmattimysql"]:execute(
+--                     "SELECT app, state FROM phone_apps WHERE charid = @charid",
+--                     {["charid"] = char:GetData("id")},
+--                     function(apps)
+--                         local states = {}
 
-                        for k, v in ipairs(apps) do
-                            states[v.app] = v.state
-                        end
-                        TriggerClientEvent("mythic_phone:client:SetAppState", src, states)
-                    end
-                )
-            end
-        )
+--                         for k, v in ipairs(apps) do
+--                             states[v.app] = v.state
+--                         end
+--                         TriggerClientEvent("mythic_phone:client:SetAppState", src, states)
+--                     end
+--                 )
+--             end
+--         )
 
-        Citizen.CreateThread(
-            function()
-                char.Inventory.Temporary:Check(
-                    "advsdcard",
-                    1,
-                    function(status)
-                        if status ~= nil then
-                            TriggerClientEvent("mythic_phone:client:UseSDCard", src, true)
-                        else
-                            char.Inventory.Temporary:Check(
-                                "sdcard",
-                                1,
-                                function(status)
-                                    if status ~= nil then
-                                        TriggerClientEvent("mythic_phone:client:UseSDCard", src, false)
-                                    end
-                                end
-                            )
-                        end
-                    end
-                )
-            end
-        )
-    end
-)
+--         Citizen.CreateThread(
+--             function()
+--                 char.Inventory.Temporary:Check(
+--                     "advsdcard",
+--                     1,
+--                     function(status)
+--                         if status ~= nil then
+--                             TriggerClientEvent("mythic_phone:client:UseSDCard", src, true)
+--                         else
+--                             char.Inventory.Temporary:Check(
+--                                 "sdcard",
+--                                 1,
+--                                 function(status)
+--                                     if status ~= nil then
+--                                         TriggerClientEvent("mythic_phone:client:UseSDCard", src, false)
+--                                     end
+--                                 end
+--                             )
+--                         end
+--                     end
+--                 )
+--             end
+--         )
+--     end
+-- )
 
 AddEventHandler(
     "mythic_base:shared:ComponentsReady",

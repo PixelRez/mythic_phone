@@ -3,6 +3,13 @@ import Config from "../config";
 window.addEventListener("message", event => {
   switch (event.data.action) {
     case "setup":
+      console.log(
+        "AddEventListener Message resources/mythic_phone/ui/js/src/utils/data.js"
+      );
+      console.log("event.data");
+      console.log(JSON.stringify(event.data));
+      console.log("event.data.data");
+      console.log(JSON.stringify(event.data.data));
       SetupData(event.data.data);
       break;
     case "Logout":
@@ -67,10 +74,19 @@ function UpdateObjectData(
 }
 
 function GetData(name) {
+  console.log("GetData resources/mythic_phone/ui/js/src/utils/data.js");
+  console.log(name);
+  console.log("JSON.parse(window.localStorage.getItem(name))");
+  console.log(JSON.stringify(JSON.parse(window.localStorage.getItem(name))));
   return JSON.parse(window.localStorage.getItem(name));
 }
 
 function StoreDataLua(key, data) {
+  console.log("StoreDataLua resources/mythic_phone/ui/js/src/utils/data.js");
+  console.log("key");
+  console.log(JSON.stringify(key));
+  console.log("data");
+  console.log(JSON.stringify(data));
   $.post(
     Config.ROOT_ADDRESS + "/RegisterData",
     JSON.stringify({
@@ -81,6 +97,9 @@ function StoreDataLua(key, data) {
 }
 
 function GetDataLua(key) {
+  console.log("GetDataLua resources/mythic_phone/ui/js/src/utils/data.js");
+  console.log("key");
+  console.log(JSON.stringify(key));
   $.post(
     Config.ROOT_ADDRESS + "/GetData",
     JSON.stringify({

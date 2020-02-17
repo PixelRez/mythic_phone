@@ -10,6 +10,10 @@ var contacts = null;
 var messages = null;
 
 $("#screen-content").on("click", ".messages-list .message", event => {
+  console.log("messageslist maybe for the single person?");
+  console.log($(event.currentTarget).data("message"));
+  console.log(JSON.stringify($(event.currentTarget).data("message")));
+
   App.OpenApp(
     "message-convo",
     $(event.currentTarget).data("message"),
@@ -146,6 +150,10 @@ window.addEventListener("message-open-app", data => {
 });
 
 function SendNewText(data, cb) {
+  console.log(
+    "SendNewText data From mythic_phone/ui/js/src/apps/messages/messages.js"
+  );
+  console.log(JSON.stringify(data));
   $.post(
     Config.ROOT_ADDRESS + "/SendText",
     JSON.stringify({

@@ -1,45 +1,46 @@
-RegisterServerEvent("serverCharacterSpawned")
-AddEventHandler(
-    "serverCharacterSpawned",
-    function()
-        local src = source
-        local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
-        local cData = char:GetData()
+-- Uncomment when ready to implement this
+-- RegisterServerEvent("serverCharacterSpawned")
+-- AddEventHandler(
+--     "serverCharacterSpawned",
+--     function()
+--         local src = source
+--         local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
+--         local cData = char:GetData()
 
-        Citizen.CreateThread(
-            function()
-                exports["ghmattimysql"]:execute(
-                    "SELECT * FROM phone_tuner WHERE charid = @charid",
-                    {["charid"] = cData.id},
-                    function(dbTunes)
-                        local tunes = {}
-                        if dbTunes[1] ~= nil then
-                            for k, v in pairs(dbTunes) do
-                                table.insert(
-                                    tunes,
-                                    {
-                                        json.decode(v.data)
-                                    }
-                                )
-                            end
-                        end
+--         Citizen.CreateThread(
+--             function()
+--                 exports["ghmattimysql"]:execute(
+--                     "SELECT * FROM phone_tuner WHERE charid = @charid",
+--                     {["charid"] = cData.id},
+--                     function(dbTunes)
+--                         local tunes = {}
+--                         if dbTunes[1] ~= nil then
+--                             for k, v in pairs(dbTunes) do
+--                                 table.insert(
+--                                     tunes,
+--                                     {
+--                                         json.decode(v.data)
+--                                     }
+--                                 )
+--                             end
+--                         end
 
-                        TriggerClientEvent(
-                            "mythic_phone:client:SetupData",
-                            src,
-                            {{name = "factory-tunes", data = Config.FactoryTunes}}
-                        )
-                        TriggerClientEvent(
-                            "mythic_phone:client:SetupData",
-                            src,
-                            {{name = "custom-tunes", data = tunes}}
-                        )
-                    end
-                )
-            end
-        )
-    end
-)
+--                         TriggerClientEvent(
+--                             "mythic_phone:client:SetupData",
+--                             src,
+--                             {{name = "factory-tunes", data = Config.FactoryTunes}}
+--                         )
+--                         TriggerClientEvent(
+--                             "mythic_phone:client:SetupData",
+--                             src,
+--                             {{name = "custom-tunes", data = tunes}}
+--                         )
+--                     end
+--                 )
+--             end
+--         )
+--     end
+-- )
 
 ESX.RegisterServerCallback(
     "mythic_phone:server:SaveTune",

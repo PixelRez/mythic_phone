@@ -9,6 +9,7 @@ import "../../css/src/materialize.scss";
 import "../../css/src/style.scss";
 
 import Test from "./test";
+import custom from "./apps/tuner/custom";
 
 var appTrail = [
   {
@@ -213,19 +214,30 @@ function SetupApp(app, data, pop, disableFade, exit) {
     dataType: "html",
     statusCode: {
       404: function() {
+        console.log("ajax Post fail");
         appTrail.push({ app: app, data: null, fade: false, close: exit });
         Notif.Alert("App Doesn't Exist", 1000);
         GoHome();
         $(".footer-button").removeClass("disabled");
       }
     },
+
     success: function(response) {
+      console.log("ajax Post success");
+      console.log("response");
+      console.log(JSON.stringify(response));
       $("#screen-content").html(response);
       InitShit();
 
       window.dispatchEvent(
         new CustomEvent(`${appTrail[appTrail.length - 1].app}-close-app`)
       );
+      console.log("Inside App.js SetupApp");
+      console.log(JSON.stringify(app));
+      console.log(JSON.stringify(data));
+      console.log(pop);
+      console.log(disableFade);
+      console.log(exit);
       if (pop) {
         appTrail.pop();
         disableFade = null;
@@ -243,6 +255,9 @@ function SetupApp(app, data, pop, disableFade, exit) {
       window.dispatchEvent(
         new CustomEvent(`remove-closed-notif`, { detail: { app: app } })
       );
+      console.log(`just about to send to the ${app}-open-app`);
+      console.log(JSON.stringify(data));
+
       window.dispatchEvent(
         new CustomEvent(`${app}-open-app`, { detail: data })
       );
@@ -282,8 +297,16 @@ function OpenApp(
   disableFade = false,
   customExit = false
 ) {
+  console.log("Inside App.js OpenApp");
+  console.log(JSON.stringify(app));
+  console.log(JSON.stringify(data));
+  console.log(pop);
+  console.log(disableFade);
+  console.log(customExit);
   if ($("#screen-content .app-container").length <= 0 || disableFade) {
+    console.log(`Inside 1`);
     if (appTrail[appTrail.length - 1].close) {
+      console.log(`Inside 2`);
       window.dispatchEvent(
         new CustomEvent(
           `${appTrail[appTrail.length - 1].app}-custom-close-app`,
@@ -299,10 +322,18 @@ function OpenApp(
         )
       );
     } else {
+      console.log(`Inside 3`);
+      console.log(JSON.stringify(app));
+      console.log(JSON.stringify(data));
+      console.log(pop);
+      console.log(disableFade);
+      console.log(customExit);
       SetupApp(app, data, pop, disableFade, customExit);
     }
   } else {
+    console.log(`Inside 4`);
     if (appTrail[appTrail.length - 1].close) {
+      console.log(`Inside 5`);
       window.dispatchEvent(
         new CustomEvent(
           `${appTrail[appTrail.length - 1].app}-custom-close-app`,
@@ -318,11 +349,13 @@ function OpenApp(
         )
       );
     } else {
+      console.log(`Inside 6`);
       $("#screen-content").fadeOut("fast", () => {
         SetupApp(app, data, pop, disableFade, customExit);
       });
     }
   }
+  console.log(`End`);
 }
 
 function RefreshApp() {

@@ -1,31 +1,32 @@
-RegisterServerEvent("serverCharacterSpawned")
-AddEventHandler(
-    "serverCharacterSpawned",
-    function()
-        local src = source
-        local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
-        local cData = char:GetData()
+-- Uncomment when ready to implement this
+-- RegisterServerEvent("serverCharacterSpawned")
+-- AddEventHandler(
+--     "serverCharacterSpawned",
+--     function()
+--         local src = source
+--         local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
+--         local cData = char:GetData()
 
-        Citizen.CreateThread(
-            function()
-                local myChannels = {}
-                exports["ghmattimysql"]:execute(
-                    "SELECT ch.* FROM phone_irc_channels ch INNER JOIN phone_irc_messages mess ON ch.channel = mess.channel WHERE charid = @charid GROUP BY mess.channel ORDER BY mess.date DESC",
-                    {
-                        ["charid"] = cData.id
-                    },
-                    function(channels)
-                        TriggerClientEvent(
-                            "mythic_phone:client:SetupData",
-                            src,
-                            {{name = "irc-channels", data = channels}}
-                        )
-                    end
-                )
-            end
-        )
-    end
-)
+--         Citizen.CreateThread(
+--             function()
+--                 local myChannels = {}
+--                 exports["ghmattimysql"]:execute(
+--                     "SELECT ch.* FROM phone_irc_channels ch INNER JOIN phone_irc_messages mess ON ch.channel = mess.channel WHERE charid = @charid GROUP BY mess.channel ORDER BY mess.date DESC",
+--                     {
+--                         ["charid"] = cData.id
+--                     },
+--                     function(channels)
+--                         TriggerClientEvent(
+--                             "mythic_phone:client:SetupData",
+--                             src,
+--                             {{name = "irc-channels", data = channels}}
+--                         )
+--                     end
+--                 )
+--             end
+--         )
+--     end
+-- )
 
 AddEventHandler(
     "mythic_base:shared:ComponentsReady",

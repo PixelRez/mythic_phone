@@ -49,65 +49,66 @@ end
 --     end
 -- end)
 
-RegisterServerEvent("serverCharacterSpawned")
-AddEventHandler(
-    "serverCharacterSpawned",
-    function()
-        local src = source
-        -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
-        local char = exports["utils"]:getIdentity(src)
+-- Uncomment when ready to implement this
+-- RegisterServerEvent("serverCharacterSpawned")
+-- AddEventHandler(
+--     "serverCharacterSpawned",
+--     function()
+--         local src = source
+--         -- local char = exports["mythic_base"]:FetchComponent("Fetch"):Source(src):GetData("character")
+--         local char = exports["utils"]:getIdentity(src)
 
-        local unreads = Cache:Get("phone-unread")[char:GetData("id")]
-        if unreads == nil then
-            exports["ghmattimysql"]:scalar(
-                "SELECT data FROM phone_unread WHERE charid = @charid",
-                {["charid"] = char:GetData("id")},
-                function(unread)
-                    if unread ~= nil then
-                        if json.decode(unread) ~= nil then
-                            Cache.Add:Index(
-                                "phone-unread",
-                                char:GetData("id"),
-                                {
-                                    charid = char:GetData("id"),
-                                    unread = json.decode(unread)
-                                }
-                            )
+--         local unreads = Cache:Get("phone-unread")[char:GetData("id")]
+--         if unreads == nil then
+--             exports["ghmattimysql"]:scalar(
+--                 "SELECT data FROM phone_unread WHERE charid = @charid",
+--                 {["charid"] = char:GetData("id")},
+--                 function(unread)
+--                     if unread ~= nil then
+--                         if json.decode(unread) ~= nil then
+--                             Cache.Add:Index(
+--                                 "phone-unread",
+--                                 char:GetData("id"),
+--                                 {
+--                                     charid = char:GetData("id"),
+--                                     unread = json.decode(unread)
+--                                 }
+--                             )
 
-                            TriggerClientEvent("mythic_phone:client:SyncUnread", src, json.decode(unread))
-                        else
-                            unreads = ResetUnreads()
-                            Cache.Add:Index(
-                                "phone-unread",
-                                char:GetData("id"),
-                                {
-                                    charid = char:GetData("id"),
-                                    unread = unreads
-                                }
-                            )
+--                             TriggerClientEvent("mythic_phone:client:SyncUnread", src, json.decode(unread))
+--                         else
+--                             unreads = ResetUnreads()
+--                             Cache.Add:Index(
+--                                 "phone-unread",
+--                                 char:GetData("id"),
+--                                 {
+--                                     charid = char:GetData("id"),
+--                                     unread = unreads
+--                                 }
+--                             )
 
-                            TriggerClientEvent("mythic_phone:client:SyncUnread", src, unreads)
-                        end
-                    else
-                        unreads = ResetUnreads()
-                        Cache.Add:Index(
-                            "phone-unread",
-                            char:GetData("id"),
-                            {
-                                charid = char:GetData("id"),
-                                unread = unreads
-                            }
-                        )
+--                             TriggerClientEvent("mythic_phone:client:SyncUnread", src, unreads)
+--                         end
+--                     else
+--                         unreads = ResetUnreads()
+--                         Cache.Add:Index(
+--                             "phone-unread",
+--                             char:GetData("id"),
+--                             {
+--                                 charid = char:GetData("id"),
+--                                 unread = unreads
+--                             }
+--                         )
 
-                        TriggerClientEvent("mythic_phone:client:SyncUnread", src, unreads)
-                    end
-                end
-            )
-        else
-            TriggerClientEvent("mythic_phone:client:SyncUnread", src, unreads)
-        end
-    end
-)
+--                         TriggerClientEvent("mythic_phone:client:SyncUnread", src, unreads)
+--                     end
+--                 end
+--             )
+--         else
+--             TriggerClientEvent("mythic_phone:client:SyncUnread", src, unreads)
+--         end
+--     end
+-- )
 
 AddEventHandler(
     "mythic_base:shared:ComponentsReady",

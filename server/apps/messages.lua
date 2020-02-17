@@ -13,6 +13,9 @@ AddEventHandler(
     function()
         local src = source
         local cData = exports["utils"]:getIdentity(src)
+        -- print("mythic_phone/server/apps/messages.lua serverCharacterSpawned")
+        -- print("cData")
+        -- print(exports["utils"]:tprint(cData))
 
         Citizen.CreateThread(
             function()
@@ -33,15 +36,9 @@ ESX.RegisterServerCallback(
     function(source, cb, data)
         local src = source
         local cData = exports["utils"]:getIdentity(src)
-        print("cdata")
-        print(exports["utils"]:tprint(cData))
-        print("sending text")
-        print("src")
-        print(src)
-        print("cb")
-        print(exports["utils"]:tprint(cb))
-        print("data")
-        print(exports["utils"]:tprint(data))
+        -- print("mythic_phone/server/apps/messages.lua mythic_phone:server:SendText")
+        -- print("cData")
+        -- print(exports["utils"]:tprint(cData))
 
         Citizen.CreateThread(
             function()
@@ -49,19 +46,14 @@ ESX.RegisterServerCallback(
                     "INSERT INTO phone_messages (`sender`, `receiver`, `message`) VALUES(@sender, @receiver, @message)",
                     {["sender"] = cData.phone_number, ["receiver"] = data.receiver, ["message"] = data.message},
                     function(status)
-                        print("status")
-                        print(exports["utils"]:tprint(status))
                         if status.affectedRows > 0 then
                             exports["ghmattimysql"]:execute(
                                 "SELECT * FROM phone_messages WHERE id = @id",
                                 {["id"] = status.insertId},
                                 function(text)
-                                    print("text")
-                                    print(exports["utils"]:tprint(text))
                                     if text[1] ~= nil then
                                         cb(text[1])
 
-                                        -- local tPlayer = exports["mythic_base"]:FetchComponent("Fetch"):Phone(receiver)
                                         -- SEE IF THIS IS OK, CALLS TO A SYNCHRONOUS SQL CALL FOR GETTING IDENTIFIER
                                         local tPlayerId = exports["utils"]:getIdentifierByPhoneNumber(data.receiver)
                                         if tPlayerId ~= nil then
@@ -78,7 +70,6 @@ ESX.RegisterServerCallback(
                                                             text[1]
                                                         )
                                                     else
-                                                        print("we should be sending a message WITHOUT a contact")
                                                         TriggerClientEvent(
                                                             "mythic_phone:client:ReceiveText",
                                                             tPlayerSourceID,

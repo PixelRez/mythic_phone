@@ -35,37 +35,39 @@ AddEventHandler(
     end
 )
 
-RegisterServerEvent("checkForPhone")
-AddEventHandler(
-    "checkForPhone",
-    function()
-        local _source = source
-        Citizen.CreateThread(
-            function()
-                while xPlayer == nil do
-                    Citizen.Wait(5)
-                    xPlayer = ESX.GetPlayerFromId(_source)
-                end
-                if xPlayer ~= nil then
-                    if xPlayer.getInventoryItem("phone").count >= 1 then
-                        TriggerClientEvent("togglePhone", _source)
-                    else
-                        TriggerClientEvent("noPhone", _source)
-                    end
-                end
-            end
-        )
-    end
-)
+-- Uncomment this when a phone is an item
+-- RegisterServerEvent("checkForPhone")
+-- AddEventHandler(
+--     "checkForPhone",
+--     function()
+--         local _source = source
+--         Citizen.CreateThread(
+--             function()
+--                 while xPlayer == nil do
+--                     Citizen.Wait(5)
+--                     xPlayer = ESX.GetPlayerFromId(_source)
+--                 end
+--                 if xPlayer ~= nil then
+--                     if xPlayer.getInventoryItem("phone").count >= 1 then
+--                         TriggerClientEvent("togglePhone", _source)
+--                     else
+--                         TriggerClientEvent("noPhone", _source)
+--                     end
+--                 end
+--             end
+--         )
+--     end
+-- )
 
 RegisterServerEvent("serverCharacterSpawned")
 AddEventHandler(
     "serverCharacterSpawned",
     function()
-        print("character spawned or loaded, setup phone")
         local src = source
         local cData = exports["utils"]:getIdentity(src)
-        print(exports["utils"]:tprint(cData))
+        -- print("mythic_phone/server/main.lua serverCharacterSpawned")
+        -- print("cData")
+        -- print(exports["utils"]:tprint(cData))
         TriggerClientEvent(
             "mythic_phone:client:SetupData",
             src,
@@ -75,7 +77,7 @@ AddEventHandler(
                     data = {
                         id = cData.identifier,
                         name = cData.firstname .. " " .. cData.lastname,
-                        phone = cData.phone_number_number
+                        phone = cData.phone_number
                     }
                 },
                 {name = "apps", data = Config.Apps}
@@ -86,7 +88,10 @@ AddEventHandler(
 
 ESX.RegisterServerCallback(
     "mythic_phone:server:GetData",
-    function(source, data, cb)
+    function(source, cb, data)
+        -- print("mythic_phone/server/main.lua mythic_phone:server:GetData -1")
+        -- print("data")
+        -- print(exports["utils"]:tprint(data))
         RegisterData(source, data.key, data.data)
         cb(true)
     end
@@ -94,7 +99,10 @@ ESX.RegisterServerCallback(
 
 ESX.RegisterServerCallback(
     "mythic_phone:server:GetData",
-    function(source, data, cb)
+    function(source, cb, data)
+        -- print("mythic_phone/server/main.lua mythic_phone:server:GetData -2")
+        -- print("data")
+        -- print(exports["utils"]:tprint(data))
         cb(AppData[source][data.key])
     end
 )
