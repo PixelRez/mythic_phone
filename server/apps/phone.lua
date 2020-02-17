@@ -33,9 +33,9 @@ AddEventHandler(
     function()
         local src = source
         local cData = exports["utils"]:getIdentity(src)
-        -- print("mythic_phone/server/apps/phone.lua serverCharacterSpawned")
-        -- print("cData")
-        -- print(exports["utils"]:tprint(cData))
+        print("mythic_phone/server/apps/phone.lua serverCharacterSpawned")
+        print("cData")
+        print(exports["utils"]:tprint(cData))
 
         Citizen.CreateThread(
             function()

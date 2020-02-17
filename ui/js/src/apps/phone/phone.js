@@ -47,7 +47,7 @@ $("#screen-content").on(
   "[data-section=keypad] .keypad-top .delete-num-btn",
   e => {
     let number = $(".keypad-top #number").val();
-    delHold = setInterval(function() {
+    delHold = setInterval(function () {
       if (number.length > 0) {
         let delNum = number.substring(0, number.length - 1);
         $(".keypad-top #number").val($(".keypad-top #number").masked(delNum));
@@ -78,7 +78,7 @@ $("#screen-content").on(
   }
 );
 
-$(document).mouseup(function() {
+$(document).mouseup(function () {
   clearInterval(delHold);
   return false;
 });
@@ -173,7 +173,7 @@ $("#screen-content").on(
       JSON.stringify({
         id: data.id
       }),
-      function(status) {
+      function (status) {
         if (status) {
           $(event.currentTarget)
             .parent()
@@ -205,7 +205,7 @@ $("#screen-content").on(
           .parent()
           .find(".contacts-list")
           .children(),
-        function(index, contact) {
+        function (index, contact) {
           let data = $(contact).data("data");
 
           if (
@@ -225,7 +225,7 @@ $("#screen-content").on(
           .parent()
           .find(".contacts-list")
           .children(),
-        function(index, contact) {
+        function (index, contact) {
           $(contact).fadeIn();
         }
       );
@@ -281,7 +281,7 @@ $("#screen-content").on(
   }
 );
 
-$("#screen-content").on("click", ".call-action-mute", e => {});
+$("#screen-content").on("click", ".call-action-mute", e => { });
 
 function CheckIfContact(number) {
   let contact = contacts.filter(c => c.number == number)[0];
@@ -316,19 +316,13 @@ function SetupCallType() {
 }
 
 function CreateCall(number, nonStandard, receiver) {
-  console.log("Creating call");
-  console.log(number);
-  console.log(nonStandard);
-  console.log(receiver);
   $.post(
     Config.ROOT_ADDRESS + "/CreateCall",
     JSON.stringify({
       number: number,
       nonStandard: nonStandard
     }),
-    function(status) {
-      console.log("status of creating call");
-      console.log(status);
+    function (status) {
       if (status > 0) {
         App.OpenApp("phone-call", {
           number: number,
@@ -364,36 +358,36 @@ window.addEventListener("phone-open-app", data => {
         if (contact != null) {
           $("[data-section=history").prepend(
             '<div class="call"><i class="fas fa-phone icon-outgoing-missed"></i><span>' +
-              contact.name +
-              '</span><div class="timestamp">' +
-              moment(call.date).calendar() +
-              '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
+            contact.name +
+            '</span><div class="timestamp">' +
+            moment(call.time).calendar() +
+            '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
           );
         } else {
           $("[data-section=history").prepend(
             '<div class="call"><i class="fas fa-phone icon-outgoing-missed"></i><span>' +
-              call.receiver +
-              '</span><div class="timestamp">' +
-              moment(call.date).calendar() +
-              '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
+            call.receiver +
+            '</span><div class="timestamp">' +
+            moment(call.time).calendar() +
+            '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
           );
         }
       } else if (call.status == 1) {
         if (contact != null) {
           $("[data-section=history").prepend(
             '<div class="call"><i class="fas fa-phone icon-outgoing"></i><span>' +
-              contact.name +
-              '</span><div class="timestamp">' +
-              moment(call.date).calendar() +
-              '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
+            contact.name +
+            '</span><div class="timestamp">' +
+            moment(call.time).calendar() +
+            '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
           );
         } else {
           $("[data-section=history").prepend(
             '<div class="call"><i class="fas fa-phone icon-outgoing"></i><span>' +
-              call.receiver +
-              '</span><div class="timestamp">' +
-              moment(call.date).calendar() +
-              '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
+            call.receiver +
+            '</span><div class="timestamp">' +
+            moment(call.time).calendar() +
+            '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
           );
         }
       }
@@ -404,36 +398,36 @@ window.addEventListener("phone-open-app", data => {
           if (contact != null) {
             $("[data-section=history").prepend(
               '<div class="call"><i class="fas fa-phone-alt icon-incoming-missed"></i><span>' +
-                contact.name +
-                '</span><div class="timestamp">' +
-                moment(call.date).calendar() +
-                '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
+              contact.name +
+              '</span><div class="timestamp">' +
+              moment(call.time).calendar() +
+              '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
             );
           } else {
             $("[data-section=history").prepend(
               '<div class="call"><i class="fas fa-phone-alt icon-incoming-missed"></i><span>' +
-                call.sender +
-                '</span><div class="timestamp">' +
-                moment(call.date).calendar() +
-                '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
+              call.sender +
+              '</span><div class="timestamp">' +
+              moment(call.time).calendar() +
+              '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
             );
           }
         } else if (call.status == 1) {
           if (contact != null) {
             $("[data-section=history").prepend(
               '<div class="call"><i class="fas fa-phone-alt icon-incoming"></i><span>' +
-                contact.name +
-                '</span><div class="timestamp">' +
-                moment(call.date).calendar() +
-                '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
+              contact.name +
+              '</span><div class="timestamp">' +
+              moment(call.time).calendar() +
+              '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
             );
           } else {
             $("[data-section=history").prepend(
               '<div class="call"><i class="fas fa-phone-alt icon-incoming"></i><span>' +
-                call.sender +
-                '</span><div class="timestamp">' +
-                moment(call.date).calendar() +
-                '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
+              call.sender +
+              '</span><div class="timestamp">' +
+              moment(call.time).calendar() +
+              '</div><div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
             );
           }
         }
@@ -441,14 +435,14 @@ window.addEventListener("phone-open-app", data => {
         if (call.status == 0) {
           $("[data-section=history").prepend(
             '<div class="call"><i class="fas fa-phone-alt icon-incoming"></i><span>Unknown Number</span><div class="timestamp">' +
-              moment(call.date).calendar() +
-              '</div><div class="call-actions"><i class="fas fa-phone-volume action-disabled"></i><i class="fas fa-sms action-disabled"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
+            moment(call.time).calendar() +
+            '</div><div class="call-actions"><i class="fas fa-phone-volume action-disabled"></i><i class="fas fa-sms action-disabled"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
           );
         } else {
           $("[data-section=history").prepend(
             '<div class="call"><i class="fas fa-phone-alt icon-incoming"></i><span>Unknown Number</span><div class="timestamp">' +
-              moment(call.date).calendar() +
-              '</div><div class="call-actions"><i class="fas fa-phone-volume action-disabled"></i><i class="fas fa-sms action-disabled"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
+            moment(call.time).calendar() +
+            '</div><div class="call-actions"><i class="fas fa-phone-volume action-disabled"></i><i class="fas fa-sms action-disabled"></i><i class="fas fa-trash-alt call-action-delete"></i></div></div>'
           );
         }
       }
@@ -459,7 +453,7 @@ window.addEventListener("phone-open-app", data => {
       .find(".call:first-child")
       .data("data", call);
   });
-  setTimeout(function() {
+  setTimeout(function () {
     $(".keypad-top #number")
       .get(0)
       .focus();
@@ -478,12 +472,12 @@ function SetupCallContacts() {
       .find(".contacts-list")
       .append(
         '<div class="phone-contact"><div class="phone-avatar other-' +
-          contact.name[0].toString().toLowerCase() +
-          '">' +
-          contact.name[0] +
-          "</div>" +
-          contact.name +
-          '<div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i></div></div>'
+        contact.name[0].toString().toLowerCase() +
+        '">' +
+        contact.name[0] +
+        "</div>" +
+        contact.name +
+        '<div class="call-actions"><i class="fas fa-phone-volume call-action-call"></i><i class="fas fa-sms call-action-text"></i></div></div>'
       );
     $("[data-section=contacts")
       .find(".contacts-list")

@@ -25,7 +25,6 @@ Toast message needs to be click throughable
 Unread messages Indicator at the bottom
 
 Calls:
-Call history shows timestamp all the same time
 E to hold G to hangup dont work
 
 ### Comments
