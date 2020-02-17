@@ -27,7 +27,7 @@ $("#screen-content").on("click", ".contacts-list .contact", event => {
   }
 });
 
-$("#scree-content").on("keyup", "#search-contacts", event => {
+$("#screen-content").on("keyup", "#search-contacts", event => {
   event.preventDefault();
 
   let searchVal = $(event.currentTarget).val();
@@ -39,7 +39,7 @@ $("#scree-content").on("keyup", "#search-contacts", event => {
         .parent()
         .find(".contacts-list")
         .children(),
-      function(index, contact) {
+      function (index, contact) {
         let data = $(contact).data("contact");
 
         if (
@@ -59,7 +59,7 @@ $("#scree-content").on("keyup", "#search-contacts", event => {
         .parent()
         .find(".contacts-list")
         .children(),
-      function(index, contact) {
+      function (index, contact) {
         $(contact).fadeIn();
       }
     );
@@ -141,7 +141,7 @@ $("#screen-content").on("submit", "#contacts-add-contact", event => {
       name: name,
       number: number
     }),
-    function(status) {
+    function (status) {
       if (status) {
         let modal = M.Modal.getInstance($("#add-contact-modal"));
         modal.close();
@@ -158,14 +158,14 @@ $("#screen-content").on("submit", "#contacts-add-contact", event => {
 
         $(".contacts-list").append(
           '<div class="contact waves-effect"><div class="contact-avatar other-' +
-            name[0].toString().toLowerCase() +
-            '">' +
-            name[0] +
-            '</div><div class="contact-name"><div class="contact-name-text">' +
-            name +
-            '</div><div class="number">(' +
-            number +
-            ')</div></div><div class="contact-actions waves-effect"><i class="fas fa-phone-volume action-call"></i><i class="fas fa-sms action-text"></i><i class="fas fa-user-edit action-edit modal-trigger" data-target="edit-contact-modal"></i><i class="fas fa-trash-alt action-delete"></i></div></div>'
+          name[0].toString().toLowerCase() +
+          '">' +
+          name[0] +
+          '</div><div class="contact-name"><div class="contact-name-text">' +
+          name +
+          '</div><div class="number">(' +
+          number +
+          ')</div></div><div class="contact-actions waves-effect"><i class="fas fa-phone-volume action-call"></i><i class="fas fa-sms action-text"></i><i class="fas fa-user-edit action-edit modal-trigger" data-target="edit-contact-modal"></i><i class="fas fa-trash-alt action-delete"></i></div></div>'
         );
         $(".contacts-list .contact:last-child").data("contact", {
           name: name,
@@ -217,7 +217,7 @@ $("#screen-content").on("submit", "#contacts-edit-contact", event => {
       name: name,
       number: number
     }),
-    function(status) {
+    function (status) {
       if (status) {
         let modal = M.Modal.getInstance($("#edit-contact-modal"));
         modal.close();
@@ -230,14 +230,14 @@ $("#screen-content").on("submit", "#contacts-edit-contact", event => {
 
         $(editingContact).html(
           '<div class="contact-avatar other-' +
-            name[0].toString().toLowerCase() +
-            '">' +
-            name[0] +
-            '</div><div class="contact-name"><div class="contact-name-text">' +
-            name +
-            '</div><div class="number">(' +
-            number +
-            ')</div></div><div class="contact-actions"><i class="fas fa-phone-volume action-call"></i><i class="fas fa-sms action-text"></i><i class="fas fa-user-edit action-edit modal-trigger" data-target="edit-contact-modal"></i><i class="fas fa-trash-alt action-delete"></i></div>'
+          name[0].toString().toLowerCase() +
+          '">' +
+          name[0] +
+          '</div><div class="contact-name"><div class="contact-name-text">' +
+          name +
+          '</div><div class="number">(' +
+          number +
+          ')</div></div><div class="contact-actions"><i class="fas fa-phone-volume action-call"></i><i class="fas fa-sms action-text"></i><i class="fas fa-user-edit action-edit modal-trigger" data-target="edit-contact-modal"></i><i class="fas fa-trash-alt action-delete"></i></div>'
         );
         $(editingContact).data("contact", {
           name: name,
@@ -322,7 +322,7 @@ $("#screen-content").on(
         name: data.name,
         number: data.number
       }),
-      function(status) {
+      function (status) {
         if (status) {
           $elem
             .parent()
@@ -352,14 +352,14 @@ window.addEventListener("contacts-open-app", () => {
   $.each(contacts, (index, contact) => {
     $(".contacts-list").append(
       '<div class="contact waves-effect"><div class="contact-avatar other-' +
-        contact.name[0].toString().toLowerCase() +
-        '">' +
-        contact.name[0] +
-        '</div><div class="contact-name"><div class="contact-name-text">' +
-        contact.name +
-        '</div><div class="number">(' +
-        contact.number +
-        ')</div></div><div class="contact-actions"><i class="fas fa-phone-volume action-call"></i><i class="fas fa-sms action-text"></i><i class="fas fa-user-edit action-edit  modal-trigger" data-target="edit-contact-modal"></i><i class="fas fa-trash-alt action-delete"></i></div></div>'
+      contact.name[0].toString().toLowerCase() +
+      '">' +
+      contact.name[0] +
+      '</div><div class="contact-name"><div class="contact-name-text">' +
+      contact.name +
+      '</div><div class="number">(' +
+      contact.number +
+      ')</div></div><div class="contact-actions"><i class="fas fa-phone-volume action-call"></i><i class="fas fa-sms action-text"></i><i class="fas fa-user-edit action-edit  modal-trigger" data-target="edit-contact-modal"></i><i class="fas fa-trash-alt action-delete"></i></div></div>'
     );
     contact.index = index;
     $(".contacts-list .contact:last-child").data("contact", contact);

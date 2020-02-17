@@ -19,9 +19,6 @@ tPlayer:GetData("source") ---> local tPlayerSourceID = ESX.GetPlayerFromIdentifi
 
 ### TODO
 
-Contacts:
-Filter list not working on contacts
-
 Text Messages:
 Text messages dont update the messages list when on it
 Toast message needs to be click throughable
