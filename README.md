@@ -1,3 +1,6 @@
+PUT THE YARN.LOCK IN THE UI MAIN FOLDER AND REPLACE OTHERWISE THE PHONE WILL FACE ISSUES
+
+
 # Mythic Phone | WIP
 
 This is a custom phone written for Mythic RP. It is replacing an existing port of GCPhone after having loads of issues with trying to successfully port. This is very much a Work In Progress and you should not even look into using this unless you're prepared to do a shitload of work.
